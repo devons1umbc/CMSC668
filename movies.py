@@ -12,60 +12,83 @@ def _beautiful_movies(movie, tag, attribute, class_name):
     else:
         return table
 
-
 def _parse_movie(url):
     if url is None:
         return None
     information = {}
     r = requests.get(url)
-    soup = BeautifulSoup(r.content, 'html.parser')
-    table = soup.find("h1", attrs={"class": "title"})
-    if table:
-        title = table.text.strip().split()
-        title = " ".join(title)
-        title = unidecode(title)
-        information["Title"] = [title]
+    if r:
+        soup = BeautifulSoup(r.content, 'html.parser')
+        table = soup.find("h1", attrs={"class": "title"})
+        if table:
+            title = table.text.strip().split()
+            title = " ".join(title)
+            title = unidecode(title)
+            information["Title"] = [title]
 
-    table = soup.find("p", attrs={"data-qa": "movie-info-synopsis"})
-    if table:
-        desc = table.text.strip().split()
-        desc = " ".join(desc)
-        desc = unidecode(desc)
-        information["Description"] = [desc]
+        table = soup.find("p", attrs={"data-qa": "movie-info-synopsis"})
+        if table:
+            desc = table.text.strip().split()
+            desc = " ".join(desc)
+            desc = unidecode(desc)
+            information["Description"] = [desc]
 
-    table = soup.find("p", attrs={"data-qa": "series-info-description"})
-    if table:
-        desc = table.text.strip().split()
-        desc = " ".join(desc)
-        desc = unidecode(desc)
-        information["Description"] = [desc]
+        table = soup.find("p", attrs={"data-qa": "series-info-description"})
+        if table:
+            desc = table.text.strip().split()
+            desc = " ".join(desc)
+            desc = unidecode(desc)
+            information["Description"] = [desc]
 
-    table = soup.findAll("li", attrs={"class": "info-item"})
-    if table:
-        for i in table:
-            item = i.find("b").text.strip(': ')
-            value = i.find("span").text.strip().split()
-            value = " ".join(value)
-            value = unidecode(value)
-            if "Date" in item:
-                information[item] = [value]
+        table = soup.findAll("li", attrs={"class": "info-item"})
+        if table:
+            for i in table:
+                item = i.find("b").text.strip(': ')
+                value = i.find("span").text.strip().split()
+                value = " ".join(value)
+                value = unidecode(value)
+                if "Date" in item:
+                    information[item] = [value]
+                else:
+                    value = value.split(',')
+                    value = list(map(str.strip, value))
+                    information[item] = value
+
+        table = soup.findAll("div", attrs={"class": "cast-and-crew-item"})
+        if table:
+            cast = []
+            for i in table:
+                value = i.find("p").text.strip().split()
+                value = " ".join(value)
+                value = unidecode(value)
+                cast.append(value)
+            item = "Cast"
+            information[item] = cast
+
+        table = soup.find("tile-dynamic", attrs={"class": "thumbnail"})
+        if table:
+            img = table.find("img")["src"]
+            information["Thumbnail"] = [img]
+
+        if 'Rating' in information:
+            if information['Rating'][0][0] == 'G':
+                information['Rating'] = ['G']
+            if information['Rating'][0][0] == 'R':
+                information['Rating'] = ['R']
+            if information['Rating'][0][0] == 'X':
+                information['Rating'] = ['X']
+            if 'PG-13' in information['Rating'][0]:
+                information['Rating'] = ['PG-13']
+            elif 'PG' in information['Rating'][0]:
+                information['Rating'] = ['PG']
+            if 'TV-14' in information['Rating'][0]:
+                information['Rating'] = ['TV-14']
+            if 'NC-17' in information['Rating'][0]:
+                information['Rating'] = ['NC-17']
             else:
-                value = value.split(',')
-                value = list(map(str.strip, value))
-                information[item] = value
-
-    table = soup.findAll("div", attrs={"class": "cast-and-crew-item"})
-    if table:
-        cast = []
-        for i in table:
-            value = i.find("p").text.strip().split()
-            value = " ".join(value)
-            value = unidecode(value)
-            cast.append(value)
-        item = "Cast"
-        information[item] = cast
-
-    return information
+                information['Rating'] = []
+        return information
+    return None
 
 
 def _get_movie_list(table, subtag, subattribute):
@@ -92,7 +115,9 @@ class MovieAPI:
         for curr_movie in _get_movie_list(_beautiful_movies(query, "search-page-media-row", "data-qa", "data-row"), "a",
                                           "href"):
             movie = _parse_movie(curr_movie)
-            self.new_movies.append(movie)
+            if movie:
+                print(movie)
+                self.new_movies.append(movie)
         return self.new_movies
 
     def print_movies(self):

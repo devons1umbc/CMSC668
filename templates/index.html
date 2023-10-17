@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+
+</head>
+<body>
+
+    <style>
+        .text-center
+        {
+            text-align: center;
+            word-wrap: break-word;
+            width: 206px;
+        }
+        .img-center
+        {
+            text-align: center;
+        }
+        .tab-float
+        {
+            display: inline-block;
+            vertical-align: top;
+        }
+    </style>
+
+    <form method="post" action="/" enctype="multipart/form-data">
+        <input type="text" id="query" name="query">
+        <input type="submit" id="submit" name="submit">
+    </form>
+
+    <table>
+        <tr>
+            {%for i in range(0, len)%}
+                    <td class="tab-float">
+                <table>
+                    <tr>
+                        <td class="img-center">
+                            <img src="{{movielist[i]['Thumbnail'][0]}}" width="206px" height="305px">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">
+                            {{movielist[i]['Title'][0]}}
+                        </th>
+                    </tr>
+                </table>
+                    </td>
+            {%endfor%}
+        </tr>
+    </table>
+
+</body>
+</html>
