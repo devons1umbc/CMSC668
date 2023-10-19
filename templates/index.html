@@ -10,48 +10,97 @@
 <body>
 
     <style>
-        .text-center
+        .title-center
         {
             text-align: center;
             word-wrap: break-word;
             width: 206px;
         }
-        .img-center
+        .stuff-center
         {
             text-align: center;
+
         }
         .tab-float
         {
             display: inline-block;
             vertical-align: top;
         }
+
+        .img-desc
+        {
+            margin-top: -0%;
+            position: absolute;
+            text-align: center;
+            word-wrap: break-word;
+            width: 206px;
+            height: 305px;
+            background: rgba(29, 106, 154, 0.75);
+            color: #fff;
+            visibility: hidden;
+            opacity: 0;
+
+            /* transition effect. not necessary */
+            transition: opacity .2s, visibility .2s;
+        }
+
+        .stuff-center:hover .img-desc
+        {
+            visibility: visible;
+            opacity: 1;
+        }
     </style>
 
-    <form method="post" action="/" enctype="multipart/form-data">
+    <form method="post" action="/" enctype="multipart/form-data" onsubmit="disableQuery()">
         <input type="text" id="query" name="query">
-        <input type="submit" id="submit" name="submit">
+        <input type="submit" id="submit-query" name="submit" value="Submit Query">
     </form>
 
+    <form method="post" action="/" enctype="multipart/form-data" onsubmit="disableOpinion">
     <table>
         <tr>
             {%for i in range(0, len)%}
                     <td class="tab-float">
-                <table>
-                    <tr>
-                        <td class="img-center">
-                            <img src="{{movielist[i]['Thumbnail'][0]}}" width="206px" height="305px">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class="text-center">
-                            {{movielist[i]['Title'][0]}}
-                        </th>
-                    </tr>
-                </table>
+                        <table>
+                            <tr>
+                                <td class="stuff-center">
+                                    <p class="img-desc">{{movielist[i]['Description'][0]}}</p>
+                                    <img src="{{movielist[i]['Thumbnail'][0]}}" width="206px" height="305px">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="title-center">
+                                    {{movielist[i]['Title'][0]}}
+
+                                        <input type="radio" id="like" name="{{movielist[i]['Title'][0]}}" value="1">
+                                        <input type="radio" id="dislike" name="{{movielist[i]['Title'][0]}}" value="0">
+
+
+                                </th>
+                            </tr>
+                        </table>
                     </td>
             {%endfor%}
         </tr>
     </table>
+    <input type="submit" id="submit-likes" name="submit" value="Submit Opinion">
+    </form>
 
 </body>
+
+<script>
+function disableQuery() {
+  document.getElementById('query').disabled = false;
+  document.getElementById('submit-query').disabled = true;
+}
+
+function disableQuery() {
+  document.getElementById('submit-likes').disabled = true;
+}
+
+document.getElementById('submit-likes').disabled = {{disabled}};
+
+</script>
+
+
 </html>

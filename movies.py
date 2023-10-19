@@ -87,6 +87,7 @@ def _parse_movie(url):
                 information['Rating'] = ['NC-17']
             else:
                 information['Rating'] = []
+        print(information)
         return information
     return None
 
