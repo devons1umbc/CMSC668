@@ -13,8 +13,8 @@ if __name__ == "__main__":
 
     # print("Loose Title Search")
     # database.get_all_type_title_loose("hell")
-    print("\nStrict Title Search")
-    print(database.get_all_type_title_strict("Pokemon XYZ \(2015 - Present\)"))
+    # print("\nStrict Title Search")
+    # print(database.get_all_type_title_strict("Pokemon XYZ \(2015 - Present\)"))
     # printAll(database.get_all_type_title_strict("Digimon"))
 
     # print("\nLoose Description Search")
@@ -24,10 +24,10 @@ if __name__ == "__main__":
 
     # database.delete_title('yu-gi-oh')
     # print("\nSearch Movie/Show Into Database")
-    # query = str(input("Insert Query...: "))
-    # print(movie.query_movie(query))
-    # database.add_list_to_db(movie.query_movie(query))
-    # movie.query_movie(query)
+    query = str(input("Insert Query...: "))
+    movies = movie.query_movie(query)
+    # print(movies)
+
 
     # print("\nDelete Movie/Show From Database")
     # database.delete_title("Broaden Your Horizons")

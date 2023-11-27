@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 from unidecode import unidecode
-
+import database
 
 def _beautiful_movies(movie, tag, attribute, class_name):
     r = requests.get("https://www.rottentomatoes.com/search?search=" + movie)
@@ -113,11 +113,13 @@ class MovieAPI:
 
     def query_movie(self, query):
         self.new_movies = []
-        for curr_movie in _get_movie_list(_beautiful_movies(query, "search-page-media-row", "data-qa", "data-row"), "a",
-                                          "href"):
+        print(query)
+        for curr_movie in _get_movie_list(_beautiful_movies(query, "search-page-media-row", "data-qa", "data-row"), "a", "href"):
+            print(curr_movie)
             movie = _parse_movie(curr_movie)
             if movie:
                 print(movie)
+                database.add_list_to_db([movie])
                 self.new_movies.append(movie)
         return self.new_movies
 

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {{movielist}}
+    {% if movielist[0] == '' %}
+        <p>
+            Not enough movies
+        </p>
+    {% else %}
+        <p>
+            Yay!
+        </p>
+    {% endif %}
+</body>
+</html>

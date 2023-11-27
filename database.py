@@ -17,7 +17,8 @@ def add_list_to_db(dictionary_array):
     # seconds = 1
     for site in dictionary_array:
         title = site['Title'][0]
-        if collection.find_one({"Title": title}) is not None:
+        description = site['Description'][0]
+        if collection.find_one({"Title": title}) is not None and collection.find_one({"Description": description}) is not None:
             print("ALREADY EXISTS")
             print(site)
         else:

@@ -22,10 +22,10 @@ def disliked_movies(title):
     return movies
 
 
-def find_best(movies):
+def find_best(liked, disliked):
     # print(movies)
     # Sample movie data in dictionary format
-    movie_data = movies
+    movie_data = liked + disliked
     for i in movie_data:
         if 'Description' not in i:
             i['Description'] = []

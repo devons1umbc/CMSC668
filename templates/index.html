@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>MRS Home</title>
 
 
 
@@ -16,12 +16,13 @@
             word-wrap: break-word;
             width: 206px;
         }
-        .stuff-center
+
+        .hover-reveal
         {
             text-align: center;
-
         }
-        .tab-float
+
+        .movie-wrap
         {
             display: inline-block;
             vertical-align: top;
@@ -29,9 +30,8 @@
 
         .img-desc
         {
-            margin-top: -0%;
+            margin-top: 0%;
             position: absolute;
-            text-align: center;
             word-wrap: break-word;
             width: 206px;
             height: 305px;
@@ -39,52 +39,68 @@
             color: #fff;
             visibility: hidden;
             opacity: 0;
+            resize: none;
 
             /* transition effect. not necessary */
             transition: opacity .2s, visibility .2s;
         }
 
-        .stuff-center:hover .img-desc
+        .hover-reveal:hover .img-desc
         {
             visibility: visible;
             opacity: 1;
         }
+
+
     </style>
 
+    <h3>
+        {{username}}
+    </h3>
+    <br>
     <form method="post" action="/" enctype="multipart/form-data" onsubmit="disableQuery()">
         <input type="text" id="query" name="query">
         <input type="submit" id="submit-query" name="submit" value="Submit Query">
     </form>
-
-    <form method="post" action="/" enctype="multipart/form-data" onsubmit="disableOpinion">
-    <table>
-        <tr>
-            {%for i in range(0, len)%}
-                    <td class="tab-float">
-                        <table>
-                            <tr>
-                                <td class="stuff-center">
-                                    <p class="img-desc">{{movielist[i]['Description'][0]}}</p>
-                                    <img src="{{movielist[i]['Thumbnail'][0]}}" width="206px" height="305px">
-                                </td>
-                            </tr>
-                            <tr>
-                                <th class="title-center">
-                                    {{movielist[i]['Title'][0]}}
-
-                                        <input type="radio" id="like" name="{{movielist[i]['Title'][0]}}" value="1">
-                                        <input type="radio" id="dislike" name="{{movielist[i]['Title'][0]}}" value="0">
-
-
-                                </th>
-                            </tr>
-                        </table>
-                    </td>
-            {%endfor%}
-        </tr>
-    </table>
-    <input type="submit" id="submit-likes" name="submit" value="Submit Opinion">
+    <form action="/results">
+         <button type="submit">Show Me My Movie!</button>
     </form>
+
+    {%if movielist[0] != '' %}
+        <form method="post" action="/" enctype="multipart/form-data" onsubmit="disableOpinion">
+        <table>
+            <tr>
+                {%for i in range(0, len)%}
+                        <td class="movie-wrap">
+                            <table>
+                                <tr>
+                                    <td class="hover-reveal">
+                                        <textarea class="img-desc" readonly>{{movielist[i]['Description'][0]}}</textarea>
+                                        <img src="{{movielist[i]['Thumbnail'][0]}}" width="206px" height="305px">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="title-center">
+                                        {{movielist[i]['Title'][0]}}
+                                        <br>
+                                        <label>Like </label> <input type="radio" id="like" name="{{movielist[i]['Title'][0]}}" value="1">
+                                        <label>Dislike </label> <input type="radio" id="dislike" name="{{movielist[i]['Title'][0]}}" value="0">
+                                    </th>
+                                </tr>
+                            </table>
+                        </td>
+                {%endfor%}
+            </tr>
+        </table>
+        <input type="submit" id="submit-likes" name="submit-likes" value="Submit Opinion">
+        </form>
+    {% else %}
+        <h1>
+            <center>
+                Please add more movies to your like/dislike list for us to recommend a proper movie!
+            </center>
+        </h1>
+    {% endif %}
 
 </body>
 
